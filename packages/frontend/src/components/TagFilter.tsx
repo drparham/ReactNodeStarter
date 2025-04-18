@@ -44,6 +44,16 @@ export default function TagFilter({ selectedTag, onTagSelect }: TagFilterProps) 
 
   return (
     <div className="flex flex-wrap gap-2">
+      <button
+        onClick={() => onTagSelect(null)}
+        className={`px-3 py-1 rounded-full text-sm ${
+          !selectedTag
+            ? 'bg-blue-100 text-blue-800'
+            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+        }`}
+      >
+        All
+      </button>
       {tags.map((tag) => (
         <button
           key={tag.id}
