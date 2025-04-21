@@ -10,8 +10,11 @@ import {
   Grid,
   Chip,
   Box,
+  Autocomplete,
+  TextField,
 } from '@mui/material';
 import { getArticles } from '../api/articles';
+import { getTags } from '../api/tags';
 
 interface Article {
   id: string;
@@ -26,24 +29,35 @@ interface Article {
   createdAt: string;
 }
 
+interface Tag {
+  id: string;
+  name: string;
+}
+
 const Home = () => {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchArticles = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getArticles();
-        setArticles(data);
+        const [articlesData, tagsData] = await Promise.all([
+          getArticles(false, selectedTags.map(tag => tag.id)),
+          getTags(),
+        ]);
+        setArticles(articlesData);
+        setTags(tagsData);
       } catch (error) {
-        console.error('Error fetching articles:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchArticles();
-  }, []);
+    fetchData();
+  }, [selectedTags]);
 
   if (loading) {
     return (
@@ -55,9 +69,35 @@ const Home = () => {
 
   return (
     <Container>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Latest Articles
-      </Typography>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Latest Articles
+        </Typography>
+        <Autocomplete
+          multiple
+          options={tags}
+          getOptionLabel={(option) => option.name}
+          value={selectedTags}
+          onChange={(_, newValue) => setSelectedTags(newValue)}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Filter by tags"
+              placeholder="Select tags"
+            />
+          )}
+          renderTags={(value, getTagProps) =>
+            value.map((option, index) => (
+              <Chip
+                label={option.name}
+                {...getTagProps({ index })}
+                key={option.id}
+              />
+            ))
+          }
+          sx={{ mb: 2 }}
+        />
+      </Box>
       <Grid container spacing={3}>
         {articles.map((article) => (
           <Grid item xs={12} key={article.id}>

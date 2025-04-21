@@ -24,8 +24,13 @@ export interface CreateArticleInput {
 
 export interface UpdateArticleInput extends Partial<CreateArticleInput> {}
 
-export const getArticles = async (): Promise<Article[]> => {
-  const response = await axios.get(`${API_URL}/articles`);
+export const getArticles = async (admin: boolean = false, tagIds?: string[]): Promise<Article[]> => {
+  const endpoint = admin ? '/admin' : '';
+  const params = new URLSearchParams();
+  if (tagIds && tagIds.length > 0) {
+    tagIds.forEach(id => params.append('tagIds', id));
+  }
+  const response = await axios.get(`${API_URL}/articles${endpoint}?${params.toString()}`);
   return response.data;
 };
 
@@ -39,11 +44,11 @@ export const createArticle = async (data: CreateArticleInput): Promise<Article> 
   return response.data;
 };
 
-export const updateArticle = async (slug: string, data: UpdateArticleInput): Promise<Article> => {
-  const response = await axios.put(`${API_URL}/articles/${slug}`, data);
+export const updateArticle = async (id: string, data: UpdateArticleInput): Promise<Article> => {
+  const response = await axios.put(`${API_URL}/articles/${id}`, data);
   return response.data;
 };
 
-export const deleteArticle = async (slug: string): Promise<void> => {
-  await axios.delete(`${API_URL}/articles/${slug}`);
+export const deleteArticle = async (id: string): Promise<void> => {
+  await axios.delete(`${API_URL}/articles/${id}`);
 }; 

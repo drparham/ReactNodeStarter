@@ -16,6 +16,7 @@ import {
   FormControlLabel,
   Switch,
   Chip,
+  Autocomplete,
 } from '@mui/material';
 import { getArticles, createArticle, updateArticle, deleteArticle } from '../api/articles';
 import { getTags } from '../api/tags';
@@ -56,7 +57,7 @@ const Admin = () => {
   const fetchData = async () => {
     try {
       const [articlesData, tagsData] = await Promise.all([
-        getArticles(),
+        getArticles(true),
         getTags(),
       ]);
       setArticles(articlesData);
@@ -95,9 +96,15 @@ const Admin = () => {
   const handleSubmit = async () => {
     try {
       if (selectedArticle) {
-        await updateArticle(selectedArticle.slug, formData);
+        await updateArticle(selectedArticle.id, {
+          ...formData,
+          tagIds: formData.tagIds,
+        });
       } else {
-        await createArticle(formData);
+        await createArticle({
+          ...formData,
+          tagIds: formData.tagIds,
+        });
       }
       handleClose();
       fetchData();
@@ -106,10 +113,10 @@ const Admin = () => {
     }
   };
 
-  const handleDelete = async (slug: string) => {
+  const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this article?')) {
       try {
-        await deleteArticle(slug);
+        await deleteArticle(id);
         fetchData();
       } catch (error) {
         console.error('Error deleting article:', error);
@@ -155,7 +162,7 @@ const Admin = () => {
                 <Button
                   size="small"
                   color="error"
-                  onClick={() => handleDelete(article.slug)}
+                  onClick={() => handleDelete(article.id)}
                 >
                   Delete
                 </Button>
@@ -188,6 +195,35 @@ const Admin = () => {
               value={formData.content}
               onChange={(e) =>
                 setFormData({ ...formData, content: e.target.value })
+              }
+              sx={{ mb: 2 }}
+            />
+            <Autocomplete
+              multiple
+              options={tags}
+              getOptionLabel={(option) => option.name}
+              value={tags.filter(tag => formData.tagIds.includes(tag.id))}
+              onChange={(_, newValue) => {
+                setFormData({
+                  ...formData,
+                  tagIds: newValue.map(tag => tag.id),
+                });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Tags"
+                  placeholder="Select tags"
+                />
+              )}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    label={option.name}
+                    {...getTagProps({ index })}
+                    key={option.id}
+                  />
+                ))
               }
               sx={{ mb: 2 }}
             />

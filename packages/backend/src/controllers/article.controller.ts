@@ -44,7 +44,30 @@ export const createArticle = async (req: Request<{}, {}, CreateArticleInput>, re
   }
 };
 
-export const getArticles = async (req: Request, res: Response) => {
+export const getPublishedArticles = async (req: Request, res: Response) => {
+  try {
+    const { tagIds } = req.query;
+    const queryBuilder = articleRepository
+      .createQueryBuilder('article')
+      .leftJoinAndSelect('article.tags', 'tag')
+      .where('article.published = :published', { published: true });
+
+    if (tagIds) {
+      const tagIdArray = Array.isArray(tagIds) ? tagIds : [tagIds];
+      queryBuilder.andWhere('tag.id IN (:...tagIds)', { tagIds: tagIdArray });
+    }
+
+    const articles = await queryBuilder
+      .orderBy('article.createdAt', 'DESC')
+      .getMany();
+
+    return res.json(articles);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error fetching published articles', error });
+  }
+};
+
+export const getAdminArticles = async (req: Request, res: Response) => {
   try {
     const articles = await articleRepository.find({
       relations: ['tags'],
