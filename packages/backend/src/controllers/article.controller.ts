@@ -7,12 +7,20 @@ import { CreateArticleInput, UpdateArticleInput } from '../schemas/article.schem
 const articleRepository = AppDataSource.getRepository(Article);
 const tagRepository = AppDataSource.getRepository(Tag);
 
+const generateSlug = (title: string): string => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)+/g, '');
+};
+
 export const createArticle = async (req: Request<{}, {}, CreateArticleInput>, res: Response) => {
   try {
     const { title, content, published, tagIds } = req.body;
     
     const article = new Article();
     article.title = title;
+    article.slug = generateSlug(title);
     article.content = content;
     article.published = published || false;
 
@@ -43,7 +51,7 @@ export const getArticles = async (req: Request, res: Response) => {
 export const getArticle = async (req: Request, res: Response) => {
   try {
     const article = await articleRepository.findOne({
-      where: { id: req.params.id },
+      where: { slug: req.params.slug },
       relations: ['tags']
     });
     
@@ -57,11 +65,11 @@ export const getArticle = async (req: Request, res: Response) => {
   }
 };
 
-export const updateArticle = async (req: Request<{ id: string }, {}, UpdateArticleInput>, res: Response) => {
+export const updateArticle = async (req: Request<{ slug: string }, {}, UpdateArticleInput>, res: Response) => {
   try {
     const { title, content, published, tagIds } = req.body;
     const article = await articleRepository.findOne({
-      where: { id: req.params.id },
+      where: { slug: req.params.slug },
       relations: ['tags']
     });
 
@@ -69,7 +77,10 @@ export const updateArticle = async (req: Request<{ id: string }, {}, UpdateArtic
       return res.status(404).json({ message: 'Article not found' });
     }
 
-    if (title) article.title = title;
+    if (title) {
+      article.title = title;
+      article.slug = generateSlug(title);
+    }
     if (content) article.content = content;
     if (published !== undefined) article.published = published;
 

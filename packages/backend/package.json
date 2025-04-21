@@ -1,28 +1,33 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "description": "Backend for the blog application",
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "migrate": "ts-node src/db/migrations.ts"
+    "migrate": "ts-node src/db/migrations.ts",
+    "seed": "ts-node src/db/seeds.ts",
+    "typeorm": "typeorm-ts-node-commonjs"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^16.4.1",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "pg": "^8.11.3",
-    "typeorm": "^0.3.20",
-    "zod": "^3.22.4"
+    "pg": "^8.10.0",
+    "typeorm": "^0.3.16",
+    "uuid": "^9.0.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.11.16",
-    "@types/pg": "^8.11.0",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.3.3"
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.15.11",
+    "@types/pg": "^8.6.6",
+    "@types/uuid": "^9.0.1",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
   }
 } 

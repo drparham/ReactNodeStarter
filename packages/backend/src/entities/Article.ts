@@ -1,27 +1,30 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from 'typeorm';
 import { Tag } from './Tag';
 
 @Entity()
 export class Article {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  title: string;
+  title!: string;
+
+  @Column({ unique: true })
+  slug!: string;
 
   @Column('text')
-  content: string;
+  content!: string;
 
   @Column({ default: false })
-  published: boolean;
-
-  @ManyToMany(() => Tag, { cascade: true })
-  @JoinTable()
-  tags: Tag[];
+  published: boolean = false;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
+
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  tags!: Tag[];
 } 

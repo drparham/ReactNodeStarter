@@ -5,6 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 export interface Article {
   id: string;
   title: string;
+  slug: string;
   content: string;
   published: boolean;
   tags: Array<{
@@ -28,8 +29,8 @@ export const getArticles = async (): Promise<Article[]> => {
   return response.data;
 };
 
-export const getArticle = async (id: string): Promise<Article> => {
-  const response = await axios.get(`${API_URL}/articles/${id}`);
+export const getArticle = async (slug: string): Promise<Article> => {
+  const response = await axios.get(`${API_URL}/articles/${slug}`);
   return response.data;
 };
 
@@ -38,11 +39,11 @@ export const createArticle = async (data: CreateArticleInput): Promise<Article> 
   return response.data;
 };
 
-export const updateArticle = async (id: string, data: UpdateArticleInput): Promise<Article> => {
-  const response = await axios.put(`${API_URL}/articles/${id}`, data);
+export const updateArticle = async (slug: string, data: UpdateArticleInput): Promise<Article> => {
+  const response = await axios.put(`${API_URL}/articles/${slug}`, data);
   return response.data;
 };
 
-export const deleteArticle = async (id: string): Promise<void> => {
-  await axios.delete(`${API_URL}/articles/${id}`);
+export const deleteArticle = async (slug: string): Promise<void> => {
+  await axios.delete(`${API_URL}/articles/${slug}`);
 }; 

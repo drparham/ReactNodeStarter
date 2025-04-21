@@ -23,6 +23,7 @@ import { getTags } from '../api/tags';
 interface Article {
   id: string;
   title: string;
+  slug: string;
   content: string;
   published: boolean;
   tags: Array<{
@@ -94,7 +95,7 @@ const Admin = () => {
   const handleSubmit = async () => {
     try {
       if (selectedArticle) {
-        await updateArticle(selectedArticle.id, formData);
+        await updateArticle(selectedArticle.slug, formData);
       } else {
         await createArticle(formData);
       }
@@ -105,10 +106,10 @@ const Admin = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (slug: string) => {
     if (window.confirm('Are you sure you want to delete this article?')) {
       try {
-        await deleteArticle(id);
+        await deleteArticle(slug);
         fetchData();
       } catch (error) {
         console.error('Error deleting article:', error);
@@ -154,7 +155,7 @@ const Admin = () => {
                 <Button
                   size="small"
                   color="error"
-                  onClick={() => handleDelete(article.id)}
+                  onClick={() => handleDelete(article.slug)}
                 >
                   Delete
                 </Button>

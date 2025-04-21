@@ -13,6 +13,7 @@ import { getArticle } from '../api/articles';
 interface Article {
   id: string;
   title: string;
+  slug: string;
   content: string;
   published: boolean;
   tags: Array<{
@@ -23,17 +24,17 @@ interface Article {
 }
 
 const Article = () => {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchArticle = async () => {
-      if (!id) return;
+      if (!slug) return;
       
       try {
-        const data = await getArticle(id);
+        const data = await getArticle(slug);
         setArticle(data);
       } catch (error) {
         setError('Error loading article');
@@ -44,7 +45,7 @@ const Article = () => {
     };
 
     fetchArticle();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

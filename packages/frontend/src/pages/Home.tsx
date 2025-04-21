@@ -16,6 +16,7 @@ import { getArticles } from '../api/articles';
 interface Article {
   id: string;
   title: string;
+  slug: string;
   content: string;
   published: boolean;
   tags: Array<{
@@ -95,7 +96,7 @@ const Home = () => {
               <CardActions>
                 <Button
                   component={RouterLink}
-                  to={`/article/${article.id}`}
+                  to={`/article/${article.slug}`}
                   size="small"
                 >
                   Read More
