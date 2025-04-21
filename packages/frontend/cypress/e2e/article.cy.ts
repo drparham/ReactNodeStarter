@@ -58,7 +58,7 @@ describe('Article Page', () => {
       .should('be.visible');
 
     // Check back button
-    cy.get('.MuiButton-root[href="/"]').should('be.visible');
+    cy.get('a[href="/"]').should('be.visible');
   });
 
   it('should handle non-existent articles', () => {
@@ -79,7 +79,7 @@ describe('Article Page', () => {
     cy.visit('/article/test-article');
     cy.wait('@getArticle');
 
-    cy.get('.MuiButton-root[href="/"]').click();
+    cy.get('a[href="/"]').first().click();
     cy.url().should('eq', Cypress.config().baseUrl + '/');
   });
 }); 
