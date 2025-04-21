@@ -23,6 +23,7 @@ export const createArticle = async (req: Request<{}, {}, CreateArticleInput>, re
     article.slug = generateSlug(title);
     article.content = content;
     article.published = published || false;
+    article.tags = [];
 
     if (tagIds && tagIds.length > 0) {
       const tags = await tagRepository.findByIds(tagIds);
@@ -30,7 +31,14 @@ export const createArticle = async (req: Request<{}, {}, CreateArticleInput>, re
     }
 
     const savedArticle = await articleRepository.save(article);
-    return res.status(201).json(savedArticle);
+    
+    // Fetch the article with tags to ensure proper relations are returned
+    const articleWithTags = await articleRepository.findOne({
+      where: { id: savedArticle.id },
+      relations: ['tags']
+    });
+    
+    return res.status(201).json(articleWithTags);
   } catch (error) {
     return res.status(500).json({ message: 'Error creating article', error });
   }
@@ -65,11 +73,11 @@ export const getArticle = async (req: Request, res: Response) => {
   }
 };
 
-export const updateArticle = async (req: Request<{ slug: string }, {}, UpdateArticleInput>, res: Response) => {
+export const updateArticle = async (req: Request<{ id: string }, {}, UpdateArticleInput>, res: Response) => {
   try {
     const { title, content, published, tagIds } = req.body;
     const article = await articleRepository.findOne({
-      where: { slug: req.params.slug },
+      where: { id: req.params.id },
       relations: ['tags']
     });
 
@@ -90,7 +98,14 @@ export const updateArticle = async (req: Request<{ slug: string }, {}, UpdateArt
     }
 
     const updatedArticle = await articleRepository.save(article);
-    return res.json(updatedArticle);
+    
+    // Fetch the article with tags to ensure proper relations are returned
+    const articleWithTags = await articleRepository.findOne({
+      where: { id: updatedArticle.id },
+      relations: ['tags']
+    });
+    
+    return res.json(articleWithTags);
   } catch (error) {
     return res.status(500).json({ message: 'Error updating article', error });
   }
