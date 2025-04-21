@@ -1,148 +1,188 @@
 # React Node Starter
 
-A full-stack blog application built with React, Node.js, and TypeScript, using a monorepo structure.
+A full-stack blog application designed for pair programming interviews. This codebase provides a realistic starting point for technical interviews, featuring a modern tech stack and common development patterns.
+
+## Interview Setup
+
+This codebase is structured to facilitate pair programming interviews with the following features:
+
+- **Real-world Complexity**: A complete full-stack application with frontend and backend components
+- **Modern Tech Stack**: React, Node.js, TypeScript, and PostgreSQL
+- **Common Patterns**: RESTful API, database migrations, testing, and more
+- **Extensible Design**: Easy to add new features or modify existing ones
+
+### Interview Scenarios
+
+Candidates can be asked to:
+1. Add new features to the blog system
+2. Fix bugs or improve existing functionality
+3. Implement new API endpoints
+4. Add frontend components or improve the UI
+5. Write tests for existing or new features
+6. Optimize database queries or application performance
+
+### Getting Started for Interviews
+
+1. **Interviewer Setup**:
+   - Clone the repository
+   - Set up the development environment
+   - Prepare specific tasks or features for the candidate
+
+2. **Candidate Experience**:
+   - Clear project structure and documentation
+   - Working development environment out of the box
+   - Focus on problem-solving rather than setup
+
+A full-stack blog application built with React, Node.js, and TypeScript. This monorepo contains both frontend and backend packages, managed with npm workspaces.
+
+## Features
+
+- Modern React frontend with Material-UI
+- TypeScript backend with Express and TypeORM
+- Article management with tags
+- Responsive design
+- End-to-end testing with Cypress
+- Unit testing with Jest
+
+## Prerequisites
+
+- Node.js (v20 or higher)
+- npm (v9 or higher)
+- PostgreSQL (v14 or higher)
 
 ## Project Structure
 
 ```
 .
 ├── packages/
-│   ├── backend/          # Node.js backend with Express and TypeORM
-│   └── frontend/         # React frontend with Material-UI
-├── package.json          # Root package.json for monorepo management
-└── README.md            # This file
+│   ├── frontend/     # React frontend application
+│   └── backend/      # Node.js backend application
+├── package.json      # Root package.json with workspaces
+└── README.md         # This file
 ```
-
-## Prerequisites
-
-- Node.js (v18 or higher)
-- PostgreSQL (v14 or higher)
-- npm or yarn
 
 ## Getting Started
 
-1. **Clone the repository**
+1. Clone the repository:
    ```bash
    git clone <repository-url>
    cd react-node-starter
    ```
 
-2. **Install dependencies**
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-3. **Set up the database**
-   - Create a PostgreSQL database
-   - Create a `.env` file in the `packages/backend` directory with the following content:
-     ```
-     DB_HOST=localhost
-     DB_PORT=5432
-     DB_USERNAME=your_username
-     DB_PASSWORD=your_password
-     DB_NAME=your_database_name
-     PORT=4000
-     ```
+3. Set up environment variables:
+   - Copy `.env.example` to `.env` in both frontend and backend packages
+   - Update the database connection details in `packages/backend/.env`
 
-4. **Run database migrations and seeds**
+4. Start PostgreSQL and create a database:
+   ```bash
+   createdb react_node_starter
+   ```
+
+## Database Setup
+
+1. Run migrations:
    ```bash
    cd packages/backend
-   npm run migrate
+   npm run migration:run
+   ```
+
+2. Seed the database with initial data:
+   ```bash
    npm run seed
    ```
 
-5. **Start the development servers**
-   From the root directory:
-   ```bash
-   npm run dev
-   ```
-   This will start both the backend and frontend servers concurrently.
-
-   Alternatively, you can start them separately:
-   ```bash
-   # Start backend
-   cd packages/backend
-   npm run dev
-
-   # Start frontend (in a new terminal)
-   cd packages/frontend
-   npm run dev
-   ```
-
-## Available Scripts
-
-### Root Directory
-- `npm install` - Install all dependencies
-- `npm run dev` - Start both backend and frontend in development mode
-- `npm run build` - Build all packages
-- `npm run start` - Start the backend server
-
-### Backend (`packages/backend`)
-- `npm run dev` - Start the backend server in development mode
-- `npm run build` - Build the TypeScript code
-- `npm run start` - Start the production server
-- `npm run migrate` - Run database migrations
-- `npm run seed` - Seed the database with initial data
-
-### Frontend (`packages/frontend`)
-- `npm run dev` - Start the development server
-- `npm run build` - Build the production bundle
-- `npm run preview` - Preview the production build
-
-## Features
-
-- **Backend**
-  - RESTful API with Express
-  - TypeORM for database management
-  - PostgreSQL database
-  - TypeScript support
-  - Database migrations and seeding
-
-- **Frontend**
-  - React with TypeScript
-  - Material-UI components
-  - Responsive design
-  - Client-side routing
-  - Article management
-  - Tag system
-
-## API Endpoints
-
-- `GET /api/articles` - Get all articles
-- `GET /api/articles/:slug` - Get a specific article
-- `POST /api/articles` - Create a new article
-- `PUT /api/articles/:slug` - Update an article
-- `DELETE /api/articles/:slug` - Delete an article
-
 ## Development
 
-### Adding New Features
+1. Start both frontend and backend in development mode:
+   ```bash
+   # From the root directory
+   npm run dev
+   ```
+
+   This will start:
+   - Frontend on http://localhost:3000
+   - Backend on http://localhost:4000
+
+2. For individual development:
+   ```bash
+   # Frontend only
+   cd packages/frontend
+   npm run dev
+
+   # Backend only
+   cd packages/backend
+   npm run dev
+   ```
+
+## Testing
+
+### Frontend Tests
+
+1. Run Cypress E2E tests:
+   ```bash
+   cd packages/frontend
+   npm run cypress:run
+   ```
+
+2. Run Cypress in interactive mode:
+   ```bash
+   npm run cypress:open
+   ```
+
+### Backend Tests
+
+1. Run Jest tests:
+   ```bash
+   cd packages/backend
+   npm test
+   ```
+
+2. Run tests with coverage:
+   ```bash
+   npm run test:coverage
+   ```
+
+## Building for Production
+
+1. Build both packages:
+   ```bash
+   npm run build
+   ```
+
+2. Start production server:
+   ```bash
+   npm run start
+   ```
+
+## Environment Variables
+
+### Backend (.env)
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+DB_DATABASE=react_node_starter
+PORT=4000
+```
+
+### Frontend (.env)
+```
+VITE_API_URL=http://localhost:4000/api
+```
+
+## Contributing
 
 1. Create a new branch for your feature
 2. Make your changes
 3. Run tests
 4. Submit a pull request
 
-### Running Tests
-
-```bash
-# Run backend tests
-cd packages/backend
-npm test
-
-# Run frontend tests
-cd packages/frontend
-npm test
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT
