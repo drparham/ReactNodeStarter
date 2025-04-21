@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Article from './pages/Article';
 import Admin from './pages/Admin';
+import About from './pages/About';
 
 const theme = createTheme({
   palette: {
@@ -29,6 +30,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/article/:slug" element={<Article />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/about" element={<About />} />
           </Routes>
         </Layout>
       </Router>

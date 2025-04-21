@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { AppBar, Toolbar, Typography, Container, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Box, Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
 
@@ -17,12 +17,15 @@ const Layout = ({ children }: LayoutProps) => {
               Blog
             </Link>
           </Typography>
-          <Link component={RouterLink} to="/" color="inherit" sx={{ mx: 2 }}>
+          <Button color="inherit" component={RouterLink} to="/">
             Home
-          </Link>
-          <Link component={RouterLink} to="/admin" color="inherit">
+          </Button>
+          <Button color="inherit" component={RouterLink} to="/about">
+            About
+          </Button>
+          <Button color="inherit" component={RouterLink} to="/admin">
             Admin
-          </Link>
+          </Button>
         </Toolbar>
       </AppBar>
       <Container component="main" sx={{ mt: 4, mb: 4, flex: 1 }}>
