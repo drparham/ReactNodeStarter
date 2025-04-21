@@ -1,0 +1,28 @@
+{
+  "name": "react-node-starter",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "start": "npm run start --workspace=packages/backend",
+    "dev": "concurrently \"npm run dev --workspace=packages/backend\" \"npm run dev --workspace=packages/frontend\"",
+    "build": "npm run build --workspaces",
+    "install:all": "npm install && npm install --workspaces"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.0.2",
+    "@mui/material": "^7.0.2",
+    "axios": "^1.8.4",
+    "postcss": "^8.5.3",
+    "react-router-dom": "^7.5.1",
+    "vite": "^6.3.2",
+    "vitest": "^3.1.2"
+  }
+}
